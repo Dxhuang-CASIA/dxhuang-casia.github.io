@@ -40,7 +40,7 @@
     <div class="periodical"><em>Proceedings of the 2025 IEEE Symposium Series on Computational Intelligence <strong>(SSCI)</strong>, 2025.</em></div>
     <div class="links">
       <a href="https://arxiv.org/abs/2410.08490" class="btn btn-sm z-depth-0" role="button" target="_blank" style="font-size:12px;">arXiv</a>
-      <a href="https://arxiv.org/abs/2410.08490" class="btn btn-sm z-depth-0" role="button" target="_blank" style="font-size:12px;">Poster</a>
+      <a src="/assets/files/ssci_poster.pdf" class="btn btn-sm z-depth-0" role="button" target="_blank" style="font-size:12px;">Poster</a>
     </div>
   </div>
 
