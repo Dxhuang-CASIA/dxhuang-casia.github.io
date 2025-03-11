@@ -35,11 +35,12 @@
   </div>
 
   <div class="col-sm-9" style="position: relative;padding-right: 15px;padding-left: 20px;">
-    <div class="title"><a href="https://dxhuang-casia.github.io/">CAS-GAN for contrast-free angiography synthesis</a></div>
+    <div class="title"><a href="https://arxiv.org/abs/2410.08490">CAS-GAN for contrast-free angiography synthesis</a></div>
     <div class="author"><strong>De-Xing Huang</strong>, Xiao-Hu Zhou*, Mei-Jiang Gui, Xiao-Liang Xie, Shi-Qi Liu, Shuang-Yi Wang, Hao Li, Tian-Yu Xiang, Zeng-Guang Hou*</div>
     <div class="periodical"><em>Proceedings of the 2025 IEEE Symposium Series on Computational Intelligence <strong>(SSCI)</strong>, 2025.</em></div>
     <div class="links">
       <a href="https://arxiv.org/abs/2410.08490" class="btn btn-sm z-depth-0" role="button" target="_blank" style="font-size:12px;">arXiv</a>
+      <a href="https://arxiv.org/abs/2410.08490" class="btn btn-sm z-depth-0" role="button" target="_blank" style="font-size:12px;">Poster</a>
     </div>
   </div>
 
