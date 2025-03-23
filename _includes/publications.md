@@ -41,6 +41,8 @@
     <div class="links">
       <a href="https://arxiv.org/abs/2410.08490" class="btn btn-sm z-depth-0" role="button" target="_blank" style="font-size:12px;">arXiv</a>
       <a href="/assets/files/ssci_poster.pdf" class="btn btn-sm z-depth-0" role="button" target="_blank" style="font-size:12px;">Poster</a>
+      <a href="/assets/files/ssci_slides.pdf" class="btn btn-sm z-depth-0" role="button" target="_blank" style="font-size:12px;">Slides</a>
+      <strong><i style="color:#7b5aa6">(Best Paper Finalists)</i></strong>
     </div>
   </div>
 
