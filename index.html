@@ -6,7 +6,71 @@
     <meta name="author" content="De-Xing Huang">
     <meta name="description" content="De-Xing Huang is a Ph.D. student at CASIA researching medical image processing, computer vision, and AI for healthcare.">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="#ffffff">
+    <meta name="color-scheme" content="light dark">
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#171e29" media="(prefers-color-scheme: dark)">
+    <script id="theme-init">
+      (function () {
+        var storageKey = 'dxhuang-theme';
+        var preference = 'auto';
+        var systemTheme = window.matchMedia('(prefers-color-scheme: dark)');
+        var button;
+
+        function validPreference(value) {
+          return value === 'light' || value === 'dark' ? value : 'auto';
+        }
+
+        try {
+          preference = validPreference(localStorage.getItem(storageKey));
+        } catch (error) {
+          // The switch still works when browser storage is unavailable.
+        }
+
+        function applyTheme() {
+          var theme = preference === 'auto' ? (systemTheme.matches ? 'dark' : 'light') : preference;
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.dataset.themePreference = preference;
+          document.querySelectorAll('meta[name="theme-color"]').forEach(function (meta) {
+            meta.content = theme === 'dark' ? '#171e29' : '#ffffff';
+          });
+          if (button) {
+            var label = theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode';
+            button.setAttribute('aria-label', label);
+            button.title = label;
+          }
+        }
+
+        // Apply the saved choice before the stylesheet paints the page.
+        applyTheme();
+        if (systemTheme.addEventListener) {
+          systemTheme.addEventListener('change', applyTheme);
+        } else {
+          systemTheme.addListener(applyTheme);
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+          button = document.querySelector('.theme-toggle');
+          button.addEventListener('click', function () {
+            preference = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+            try {
+              localStorage.setItem(storageKey, preference);
+            } catch (error) {
+              // Keep the current selection even if it cannot be saved.
+            }
+            applyTheme();
+          });
+          applyTheme();
+          button.hidden = false;
+        });
+
+        window.addEventListener('storage', function (event) {
+          if (event.key === storageKey || event.key === null) {
+            preference = validPreference(event.newValue);
+            applyTheme();
+          }
+        });
+      }());
+    </script>
     <meta property="og:type" content="website">
     <meta property="og:title" content="De-Xing Huang | AI for Healthcare">
     <meta property="og:description" content="Ph.D. student at CASIA researching medical image processing, computer vision, and AI for healthcare.">
@@ -24,6 +88,20 @@
     <link rel="stylesheet" type="text/css" href="stylesheet.css">
   </head>
   <body>
+    <nav class="section-nav" aria-label="Page sections">
+      <div class="section-links">
+        <a href="#top">About</a>
+        <a href="#research">Research</a>
+        <a href="#news">News</a>
+        <a href="#publications">Publications</a>
+        <a href="#awards">Awards</a>
+        <a href="#service">Service</a>
+      </div>
+      <button class="theme-toggle" type="button" aria-label="Switch color theme" title="Switch color theme" hidden>
+        <svg class="theme-icon-sun" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></svg>
+        <svg class="theme-icon-moon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20.9 13A9 9 0 0 1 11 3.1 9 9 0 1 0 20.9 13Z"/></svg>
+      </button>
+    </nav>
     <main id="top">
     <table role="presentation" class="page-shell" style="width:100%;max-width:1000px;border:0px;border-spacing:0px;border-collapse:separate;margin-right:auto;margin-left:auto;">
       <tbody>
@@ -37,13 +115,13 @@
                       Dexing Huang「黄德兴」
                     </p>
                     <p>
-                      I'm a fourth-year Ph.D. student in the Medical Robotics Lab at the <a href="https://mais.ia.ac.cn">State Key Laboratory of Multimodal Artificial Intelligence Systems</a>, <a href="http://english.ia.cas.cn">Institute of Automation, Chinese Academy of Sciences (CASIA)</a>,
+                      I'm a final-year Ph.D. student in the Medical Robotics Lab at the <a href="https://mais.ia.ac.cn">State Key Laboratory of Multimodal Artificial Intelligence Systems</a>, <a href="http://english.ia.cas.cn">Institute of Automation, Chinese Academy of Sciences (CASIA)</a>,
                       supervised by Prof. <a href="https://scholar.google.com/citations?user=tU0CwGwAAAAJ">Zeng-Guang Hou</a> (IEEE Fellow) and Prof. <a href="https://scholar.google.com/citations?user=e9_7q0gAAAAJ">Xiao-Hu Zhou</a>.
                       <br>
                       I received my B.S. degree in electronic engineering from <a href="https://www.bupt.edu.cn">Beijing University of Posts and Telecommunications (BUPT)</a> in 2022.
                     </p>
                     <p class="opportunity-note" style="text-align:center; margin:12px 0 8px 0; padding:8px 12px; background:#eaf6ff; border:1px solid #9ecff2; border-radius:8px; color:#0b4f71; font-weight:600; line-height:1.6;">
-                      I expect to graduate in 2027 and am actively seeking postdoctoral and industry research opportunities in AI for healthcare.<br>
+                      I expect to graduate in 2027 and am actively seeking postdoctoral and industry research opportunities in AI4Healthcare.<br>
                       Please feel free to reach me by <a href="mailto:huangdexing2022@ia.ac.cn" style="color:#0b4f71; text-decoration:underline;">email</a> or WeChat (hdx725).
                     </p>
                     <p class="profile-links" style="text-align:center">
@@ -63,15 +141,6 @@
             </table>
 
             <div class="content-layout">
-            <nav class="section-nav" aria-label="Page sections">
-              <span class="section-nav-title">Navigation</span>
-              <a href="#top">About</a>
-              <a href="#research">Research</a>
-              <a href="#news">News</a>
-              <a href="#publications">Publications</a>
-              <a href="#awards">Awards</a>
-              <a href="#service">Service</a>
-            </nav>
             <div class="content-main">
 
             <table role="presentation" style="width:100%;border:0px;border-spacing:0px;border-collapse:separate;margin-right:auto;margin-left:auto;">
@@ -80,11 +149,12 @@
                   <td style="padding:1px;width:100%;vertical-align:middle">
                     <h2 id="research">🧐  Research Interests</h2>
                     <p>
-                      My research centers on AI-driven medical image analysis for safer and more effective vascular interventions. My current interests include:
+                      My research lies at the intersection of artificial intelligence, medical imaging, and clinical applications. I am interested in:
                     </p>
                     <ul>
-                      <li><strong>Medical image processing:</strong> multimodal registration, vessel segmentation, and stenosis detection</li>
-                      <li><strong>Computer vision:</strong> unsupervised representation learning and generative models</li>
+                      <li><strong>Medical Foundation Models:</strong> scalable representation learning and multimodal learning for healthcare</li>
+                      <li><strong>Medical Image Analysis:</strong> segmentation, registration, and synthesis</li>
+                      <li><strong>AI-assisted Intervention:</strong> intelligent perception and navigation for vascular interventional procedures</li>
                     </ul>
                   </td>
                 </tr>
@@ -100,6 +170,7 @@
                       🔥  News
                     </h2>
                     <ul>
+                      <li><strong>[Oct. 2026]</strong> Our paper <strong>VasoMIM</strong> (Journal Extension) was accepted for publication in <a href="https://ieeexplore.ieee.org/xpl/tocresult.jsp?isnumber=4359967">IEEE Transactions on Biomedical Engineering</a> <strong>(TBME)</strong>.</li>
                       <li><strong>[Jun. 2026]</strong> Our paper <strong>SPIRONet</strong> was accepted for publication in <a href="https://www.sciencedirect.com/journal/biomedical-signal-processing-and-control">Biomedical Signal Processing and Control</a> <strong>(BSPC)</strong>.</li>
                       <li><strong>[Apr. 2026]</strong> Our paper <strong>REASON</strong> was accepted for publication in <a href="https://www.sciencedirect.com/journal/biomedical-signal-processing-and-control">Biomedical Signal Processing and Control</a> <strong>(BSPC)</strong>.</li>
                       <li><strong>[Nov. 2025]</strong> Our paper <strong>MOSformer</strong> was accepted for publication in <a href="https://www.sciencedirect.com/journal/biomimetic-intelligence-and-robotics">Biomimetic Intelligence and Robotics</a> <strong>(BIROB)</strong>.</li>
@@ -144,6 +215,41 @@
             </table>
 
 
+            <!-- TBME 2026 -->
+            <table role="presentation" style="width:100%; border:0; border-spacing:0 10px; margin:0 auto;">
+            <tbody>
+              <tr>
+                <td style="padding:1px; width:20%; vertical-align:middle;">
+                  <a href="images/T-BME2026.png" class="publication-image-link" aria-label="Open full-size image: Vascular Anatomy-Aware Self-Supervised Pre-Training for X-ray Angiogram Analysis">
+                    <img loading="lazy" decoding="async" src="images/T-BME2026.png" alt="Vascular Anatomy-Aware Self-Supervised Pre-Training for X-ray Angiogram Analysis" style="max-width:100%; height:auto; margin-right:16px;">
+                  </a>
+                </td>
+                <td style="padding:16px; width:80%; vertical-align:middle;">
+                  <a href="https://arxiv.org/abs/2602.11536">
+                    <span class="papertitle">Vascular Anatomy-Aware Self-Supervised Pre-Training for X-ray Angiogram Analysis</span>
+                  </a><br>
+                  <strong>De-Xing Huang</strong>,
+                  <a href="https://richardych.github.io/">Chaohui Yu</a>,
+                  <a href="https://scholar.google.com/citations?user=e9_7q0gAAAAJ">Xiao-Hu Zhou*</a>,
+                  <a href="https://scholar.google.com/citations?user=S3oniHQAAAAJ">Tian-Yu Xiang</a>,
+                  <a href="https://scholar.google.com/citations?user=NePbSy4AAAAJ">Qin-Yi Zhang</a>,
+                  <a href="https://scholar.google.com/citations?user=_oQTTCAAAAAJ">Mei-Jiang Gui</a>, <br>
+                  Rui-Ze Ma,
+                  Chen-Yu Wang,
+                  Nu-Fang Xiao,
+                  <a href="https://scholar.google.com/citations?user=WCRGTHsAAAAJ">Fan Wang</a>,
+                  <a href="https://scholar.google.com/citations?user=tU0CwGwAAAAJ">Zeng-Guang Hou*</a>
+                  <br>
+                  <em>IEEE Transactions on Biomedical Engineering (TBME)</em>, 2026 <strong class="publication-metric">(JCR: Q1, IF: 4.4)</strong><br>
+                  <a href="https://arxiv.org/abs/2602.11536">arXiv</a> / 
+                  <a href="https://github.com/Dxhuang-CASIA/XA-SSL">Code</a> / 
+                  <a href="https://huggingface.co/datasets/waha2000huang/XA-170K">Dataset [XA-170K]</a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+
             <!-- TASE 2025 -->
             <table role="presentation" style="width:100%; border:0; border-spacing:0 10px; margin:0 auto;">
             <tbody>
@@ -166,7 +272,7 @@
                   <a href="https://yjsh.ccmu.edu.cn/dsdw/dsjj/bsyjsds/sdykdxfsbjttyy/sjbx5/ebcbe38d9c6f4530bdb7c17457263057.htm">Ning Ma</a>,
                   Long Yan
                   <br>
-                  <em>IEEE Transactions on Automation Science and Engineering (TASE)</em>, 2025 <strong style="color: rgba(236, 10, 10, 0.829);">(JCR: Q1, IF: 7.9)</strong><br>
+                  <em>IEEE Transactions on Automation Science and Engineering (TASE)</em>, 2025 <strong class="publication-metric">(JCR: Q1, IF: 7.9)</strong><br>
                   <a href="https://ieeexplore.ieee.org/document/10381581">PDF</a>
                 </td>
               </tr>
@@ -198,7 +304,7 @@
                   Nu-Fang Xiao,
                   <a href="https://scholar.google.com/citations?user=tU0CwGwAAAAJ">Zeng-Guang Hou*</a>
                   <br>
-                  <em>Annual AAAI Conference on Artificial Intelligence (AAAI)</em>, 2026 <strong style="color: rgba(236, 10, 10, 0.829);">(CCF-A, 4167/23680, 17.6%)</strong><br>
+                  <em>Annual AAAI Conference on Artificial Intelligence (AAAI)</em>, 2026 <strong class="publication-metric">(CCF-A, 4167/23680, 17.6%)</strong><br>
                   <a href="https://ojs.aaai.org/index.php/AAAI/article/view/42503">PDF</a> /
                   <a href="https://arxiv.org/abs/2508.10794">arXiv</a> /
                   <a href="https://dxhuang-casia.github.io/VasoMIM/">Project Page</a> /
@@ -221,7 +327,7 @@
                 </td>
                 <td style="padding:16px; width:80%; vertical-align:middle;">
                   <a href="https://arxiv.org/abs/2406.19749">
-                    <span class="papertitle">SPIRONet: Spatial-frequency learning and graph-based channel interaction network for vessel segmentation</span>
+                    <span class="papertitle">SPIRONet: Spatial-Frequency Learning and Graph-Based Channel Interaction Network for Vessel Segmentation</span>
                   </a><br>
                   <strong>De-Xing Huang</strong>,
                   <a href="https://scholar.google.com/citations?user=e9_7q0gAAAAJ">Xiao-Hu Zhou*</a>,
@@ -235,7 +341,7 @@
                   <a href="https://scholar.google.com/citations?user=B_oEABoAAAAJ&hl">Bo-Xian Yao</a>,
                   <a href="https://scholar.google.com/citations?user=tU0CwGwAAAAJ">Zeng-Guang Hou*</a>
                   <br>
-                  <em>Biomedical Signal Processing and Control (BSPC)</em>, 2026 <strong style="color: rgba(236, 10, 10, 0.829);">(JCR: Q2, IF: 5.7)</strong><br>
+                  <em>Biomedical Signal Processing and Control (BSPC)</em>, 2026 <strong class="publication-metric">(JCR: Q1, IF: 5.7)</strong><br>
                   <a href="https://www.sciencedirect.com/science/article/abs/pii/S1746809426013686">PDF</a> / <a href="https://arxiv.org/abs/2406.19749">arXiv</a> / <a href="https://github.com/Dxhuang-CASIA/SPIRONet">Code</a>
                 </td>
               </tr>
@@ -254,7 +360,7 @@
                 </td>
                 <td style="padding:16px; width:80%; vertical-align:middle;">
                   <a href="https://www.sciencedirect.com/science/article/pii/S2667379726000264">
-                    <span class="papertitle">MOSformer: Momentum Encoder-based Inter-slice Fusion Transformer for Medical Image Segmentation</span>
+                    <span class="papertitle">MOSformer: Momentum Encoder-Based Inter-Slice Fusion Transformer for Medical Image Segmentation</span>
                   </a><br>
                   <strong>De-Xing Huang</strong>,
                   <a href="https://scholar.google.com/citations?user=e9_7q0gAAAAJ">Xiao-Hu Zhou*</a>,
@@ -266,7 +372,7 @@
                   <a href="https://ieeexplore.ieee.org/author/37088962360">Zhi-Chao Lai</a>,
                   <a href="https://scholar.google.com/citations?user=tU0CwGwAAAAJ">Zeng-Guang Hou*</a>
                   <br>
-                  <em>Biomimetic Intelligence and Robotics (BIROB)</em>, 2026 <strong style="color: rgba(236, 10, 10, 0.829);">(JCR: Q1, IF: 8.6)</strong><br>
+                  <em>Biomimetic Intelligence and Robotics (BIROB)</em>, 2026 <strong class="publication-metric">(JCR: Q1, IF: 8.6)</strong><br>
                   <a href="https://www.sciencedirect.com/science/article/pii/S2667379726000264">PDF</a> /
                   <a href="https://arxiv.org/abs/2401.11856">arXiv</a>
                 </td>
@@ -286,7 +392,7 @@
                 </td>
                 <td style="padding:16px; width:80%; vertical-align:middle;">
                   <a href="https://arxiv.org/abs/2511.01302">
-                    <span class="papertitle">REASON: Probability Map-guided Dual-branch Fusion Framework for Gastric Content Assessment</span>
+                    <span class="papertitle">REASON: Probability Map-Guided Dual-Branch Fusion Framework for Gastric Content Assessment</span>
                   </a><br>
                   Nu-Fang Xiao&dagger;,
                   <strong>De-Xing Huang&dagger;</strong>,
@@ -300,7 +406,7 @@
                   <a href="https://www.researchgate.net/profile/Ying-Wei-Wang">Ying-Wei Wang*</a>,
                   <a href="https://scholar.google.com/citations?user=e9_7q0gAAAAJ">Xiao-Hu Zhou*</a>
                   <br>
-                  <em>Biomedical Signal Processing and Control (BSPC)</em>, 2026 <strong style="color: rgba(236, 10, 10, 0.829);">(JCR: Q2, IF: 5.7)</strong><br>
+                  <em>Biomedical Signal Processing and Control (BSPC)</em>, 2026 <strong class="publication-metric">(JCR: Q1, IF: 5.7)</strong><br>
                   <a href="https://www.sciencedirect.com/science/article/pii/S1746809426008037">PDF</a> / <a href="https://arxiv.org/abs/2511.01302">arXiv</a>
                 </td>
               </tr>
@@ -319,7 +425,7 @@
                 </td>
                 <td style="padding:16px; width:80%; vertical-align:middle;">
                   <a href="https://ieeexplore.ieee.org/document/11060856">
-                    <span class="papertitle">CAS-GAN for Contrast-free Angiography Synthesis</span>
+                    <span class="papertitle">CAS-GAN for Contrast-Free Angiography Synthesis</span>
                   </a><br>
                   <strong>De-Xing Huang</strong>,
                   <a href="https://scholar.google.com/citations?user=e9_7q0gAAAAJ">Xiao-Hu Zhou*</a>,
@@ -330,7 +436,7 @@
                   <a href="https://scholar.google.com/citations?user=Yae5hXEAAAAJ">Hao Li</a>,
                   <a href="https://scholar.google.com/citations?user=S3oniHQAAAAJ">Tian-Yu Xiang</a>,
                   <a href="https://scholar.google.com/citations?user=tU0CwGwAAAAJ">Zeng-Guang Hou*</a><br>
-                  <em>IEEE Symposium Series on Computational Intelligence (SSCI)</em>, 2025 <strong style="color: rgba(236, 10, 10, 0.829);">(Best Paper Finalists)</strong><br>
+                  <em>IEEE Symposium Series on Computational Intelligence (SSCI)</em>, 2025 <strong class="publication-metric">(Best Paper Finalists)</strong><br>
                   <a href="https://ieeexplore.ieee.org/document/11060856">PDF</a> /
                   <a href="https://arxiv.org/abs/2410.08490">arXiv</a> /
                   <a href="./data/ssci_poster.pdf">Poster</a> /
@@ -362,7 +468,7 @@
                   <a href="https://www.sxufe.edu.cn/info/1740/75213.htm">Jian-Long Hao</a>, <br>
                   <a href="https://scholar.google.com/citations?user=ZQJCrTQAAAAJ">Ming-Yuan Liu*</a>,
                   <a href="https://scholar.google.com/citations?user=tU0CwGwAAAAJ">Zeng-Guang Hou</a><br>
-                  <em>International Conference on Neural Information Processing (ICONIP)</em>, 2025 <strong style="color: rgba(236, 10, 10, 0.829);">(CCF-C)</strong><br>
+                  <em>International Conference on Neural Information Processing (ICONIP)</em>, 2025 <strong class="publication-metric">(CCF-C)</strong><br>
                   <a href="https://link.springer.com/chapter/10.1007/978-981-95-4378-6_40">PDF</a> /
                   <a href="https://arxiv.org/abs/2505.17619">arXiv</a> /
                   <a href="./data/iconip_poster.pdf">Poster</a>
@@ -439,7 +545,7 @@
                   <a href="https://scholar.google.com/citations?user=B_oEABoAAAAJ&hl">Bo-Xian Yao</a>,
                   <a href="https://scholar.google.com/citations?user=tU0CwGwAAAAJ">Zeng-Guang Hou*</a>
                   <br>
-                  <em>IEEE/ASME Transactions on Mechatronics (TMECH)</em>, 2025 <strong style="color: rgba(236, 10, 10, 0.829);">(JCR: Q1, IF: 6.3)</strong><br>
+                  <em>IEEE/ASME Transactions on Mechatronics (TMECH)</em>, 2025 <strong class="publication-metric">(JCR: Q1, IF: 6.3)</strong><br>
                   <a href="https://ieeexplore.ieee.org/document/11049936">PDF</a>
                 </td>
               </tr>
@@ -472,7 +578,7 @@
                   <a href="https://scholar.google.com/citations?user=a-P6d78AAAAJ">Jia-Mou Liu</a>,
                   <a href="https://scholar.google.com/citations?user=tU0CwGwAAAAJ">Zeng-Guang Hou*</a>
                   <br>
-                  <em>IEEE Transactions on Industrial Informatics (TII)</em>, 2025 <strong style="color: rgba(236, 10, 10, 0.829);">(JCR: Q1, IF: 9.8)</strong><br>
+                  <em>IEEE Transactions on Industrial Informatics (TII)</em>, 2025 <strong class="publication-metric">(JCR: Q1, IF: 9.8)</strong><br>
                   <a href="https://ieeexplore.ieee.org/document/10966163">PDF</a>
                 </td>
               </tr>
@@ -503,7 +609,7 @@
                   <a href="https://ceie.hbu.edu.cn/info/1077/1873.htm">Xiu-Lin Liu</a>,
                   <a href="https://scholar.google.com/citations?user=tU0CwGwAAAAJ">Zeng-Guang Hou*</a>
                   <br>
-                  <em>IEEE Transactions on Cybernetics (TCYB)</em>, 2025 <strong style="color: rgba(236, 10, 10, 0.829);">(JCR: Q1, IF: 11.3)</strong><br>
+                  <em>IEEE Transactions on Cybernetics (TCYB)</em>, 2025 <strong class="publication-metric">(JCR: Q1, IF: 11.3)</strong><br>
                   <a href="https://ieeexplore.ieee.org/document/10722863">PDF</a>
                 </td>
               </tr>
@@ -536,7 +642,7 @@
                   <a href="https://ceie.hbu.edu.cn/info/1077/1873.htm">Xiu-Lin Liu</a>,
                   <a href="https://scholar.google.com/citations?user=tU0CwGwAAAAJ">Zeng-Guang Hou*</a>
                   <br>
-                  <em>IEEE Transactions on Emerging Topics in Computational Intelligence (TETCI)</em>, 2025 <strong style="color: rgba(236, 10, 10, 0.829);">(JCR: Q1, IF: 6.0)</strong><br>
+                  <em>IEEE Transactions on Emerging Topics in Computational Intelligence (TETCI)</em>, 2025 <strong class="publication-metric">(JCR: Q1, IF: 6.0)</strong><br>
                   <a href="https://ieeexplore.ieee.org/document/10663067">PDF</a> /
                   <a href="https://github.com/GARYXTY/GRAPHEEGMOTOR">Code</a>
                 </td>
@@ -568,7 +674,7 @@
                   <strong>De-Xing Huang</strong>,
                   <a href="https://scholar.google.com/citations?user=tU0CwGwAAAAJ">Zeng-Guang Hou*</a>
                   <br>
-                  <em>IEEE Transactions on Medical Robotics and Bionics (TMRB)</em>, 2024 <strong style="color: rgba(236, 10, 10, 0.829);">(JCR: Q2, IF: 4.3)</strong><br>
+                  <em>IEEE Transactions on Medical Robotics and Bionics (TMRB)</em>, 2024 <strong class="publication-metric">(JCR: Q2, IF: 4.3)</strong><br>
                   <a href="https://ieeexplore.ieee.org/document/10542446">PDF</a>
                 </td>
               </tr>
@@ -601,8 +707,39 @@
                   <a href="https://scholar.google.com/citations?user=P2HB2bsAAAAJ">Yong-Gen Ling</a>,
                   <a href="https://scholar.google.com/citations?user=tU0CwGwAAAAJ">Zeng-Guang Hou*</a>
                   <br>
-                  <em>IEEE Transactions on Medical Robotics and Bionics (TMRB)</em>, 2024 <strong style="color: rgba(236, 10, 10, 0.829);">(JCR: Q2, IF: 4.3)</strong><br>
+                  <em>IEEE Transactions on Medical Robotics and Bionics (TMRB)</em>, 2024 <strong class="publication-metric">(JCR: Q2, IF: 4.3)</strong><br>
                   <a href="https://ieeexplore.ieee.org/document/10381648">PDF</a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+
+          <!-- ICONIP 2026 -->
+          <table id="c2lue" role="presentation" style="width:100%; border:0; border-spacing:0 10px; margin:0 auto; scroll-margin-top:82px;">
+            <tbody>
+              <tr>
+                <td style="padding:1px; width:20%; vertical-align:middle;">
+                  <a href="images/ICONIP2026.png" class="publication-image-link" aria-label="Open full-size image: C²LUE: Clinically Aligned Patient-Level Ultrasound Diagnosis via Evidence-Aware Multi-Instance Learning">
+                    <img loading="lazy" decoding="async" src="images/ICONIP2026.png" alt="C²LUE: Clinically Aligned Patient-Level Ultrasound Diagnosis via Evidence-Aware Multi-Instance Learning" style="max-width:100%; height:auto; margin-right:16px;">
+                  </a>
+                </td>
+                <td style="padding:16px; width:80%; vertical-align:middle;">
+                  <a href="https://arxiv.org/abs/2610.14143">
+                    <span class="papertitle">C<sup>2</sup>LUE: Clinically Aligned Patient-Level Ultrasound Diagnosis via Evidence-Aware Multi-Instance Learning</span>
+                  </a><br>
+                  <a href="https://scholar.google.com/citations?user=NePbSy4AAAAJ">Qin-Yi Zhang</a>,
+                  Linying Cao,
+                  <strong>De-Xing Huang</strong>,
+                  <a href="https://scholar.google.com/citations?user=hDRSVkgAAAAJ">Haichuan Lin</a>,
+                  Yi Yang,
+                  Manzhi Wang,<br>
+                  <a href="https://scholar.google.com/citations?user=e9_7q0gAAAAJ">Xiao-Hu Zhou</a>,
+                  <a href="https://scholar.google.com/citations?user=2XidI20AAAAJ">Chen Chen</a>,
+                  <a href="https://scholar.google.com/citations?user=DSYSUjkAAAAJ">Shuangyi Wang*</a>,
+                  <a href="https://scholar.google.com/citations?user=tU0CwGwAAAAJ">Zeng-Guang Hou*</a><br>
+                  <em>International Conference on Neural Information Processing (ICONIP)</em>, 2026 <strong class="publication-metric">(CCF-C)</strong><br>
+                  <a href="https://arxiv.org/abs/2610.14143">arXiv</a>
                 </td>
               </tr>
             </tbody>
@@ -695,7 +832,7 @@
                   <strong>De-Xing Huang</strong>, <br>
                   <a href="https://scholar.google.com/citations?user=tU0CwGwAAAAJ">Zeng-Guang Hou*</a>
                   <br>
-                  <em>International Joint Conference on Artificial Intelligence (IJCAI)</em>, 2024 <strong style="color: rgba(236, 10, 10, 0.829);">(CCF-A)</strong><br>
+                  <em>International Joint Conference on Artificial Intelligence (IJCAI)</em>, 2024 <strong class="publication-metric">(CCF-A)</strong><br>
                   <a href="https://www.ijcai.org/proceedings/2024/0507">PDF</a> /
                   <a href="https://arxiv.org/abs/2312.03991">arXiv</a> /
                   <a href="https://github.com/xiaoyinliu0714/MICRO">Code</a>
@@ -727,7 +864,7 @@
                   <strong>De-Xing Huang</strong>, <br>
                   <a href="https://scholar.google.com/citations?user=tU0CwGwAAAAJ">Zeng-Guang Hou*</a>
                   <br>
-                  <em>International Joint Conference on Neural Networks (IJCNN)</em>, 2024 <strong style="color: rgba(236, 10, 10, 0.829);">(CCF-C)</strong><br>
+                  <em>International Joint Conference on Neural Networks (IJCNN)</em>, 2024 <strong class="publication-metric">(CCF-C)</strong><br>
                   <a href="https://ieeexplore.ieee.org/document/10650264">PDF</a>
                 </td>
               </tr>
@@ -791,7 +928,7 @@
                   <a href="https://scholar.google.com/citations?user=B_oEABoAAAAJ&hl">Bo-Xian Yao</a>,
                   <a href="https://scholar.google.com/citations?user=tU0CwGwAAAAJ">Zeng-Guang Hou*</a>
                   <br>
-                  <em>IEEE International Conference on Real-time Computing and Robotics (RCAR)</em>, 2023 <strong style="color: rgba(236, 10, 10, 0.829);">(Best Paper Award)</strong><br>
+                  <em>IEEE International Conference on Real-time Computing and Robotics (RCAR)</em>, 2023 <strong class="publication-metric">(Best Paper Award)</strong><br>
                   <a href="https://ieeexplore.ieee.org/document/10249496">PDF</a>
                 </td>
               </tr>
@@ -817,13 +954,13 @@
                   <a href="https://scholar.google.com/citations?user=GfP72-0AAAAJ">Xiao-Liang Xie</a>,
                   Shi-Qi Liu,
                   <a href="https://scholar.google.com/citations?user=6-L_0voAAAAJ">Hong-Jun Yang</a>,
-                  Zhen-Qiu Feng,
+                  Zhen-Qiu Feng, <br>
                   <a href="https://scholar.google.com/citations?user=_oQTTCAAAAAJ">Mei-Jiang Gui</a>,
                   <a href="https://scholar.google.com/citations?user=Yae5hXEAAAAJ">Hao Li</a>,
                   <strong>De-Xing Huang</strong>,
                   <a href="https://scholar.google.com/citations?user=tU0CwGwAAAAJ">Zeng-Guang Hou*</a>
                   <br>
-                  <em>ACM International Conference on Multimedia (ACM MM)</em>, 2023 <strong style="color: rgba(236, 10, 10, 0.829);">(CCF-A)</strong><br>
+                  <em>ACM International Conference on Multimedia (ACM MM)</em>, 2023 <strong class="publication-metric">(CCF-A)</strong><br>
                   <a href="https://dl.acm.org/doi/abs/10.1145/3581783.3613794">PDF</a>
                 </td>
               </tr>
@@ -853,7 +990,7 @@
                   <strong>De-Xing Huang</strong>, <br>
                   <a href="https://scholar.google.com/citations?user=tU0CwGwAAAAJ">Zeng-Guang Hou*</a>
                   <br>
-                  <em>International Conference on Neural Information Processing (ICONIP)</em>, 2023 <strong style="color: rgba(236, 10, 10, 0.829);">(CCF-C)</strong><br>
+                  <em>International Conference on Neural Information Processing (ICONIP)</em>, 2023 <strong class="publication-metric">(CCF-C)</strong><br>
                   <a href="https://link.springer.com/chapter/10.1007/978-981-99-8184-7_3">PDF</a>
                 </td>
               </tr>
@@ -890,13 +1027,13 @@
             </tbody>
           </table>
 
-
             <table role="presentation" style="width:100%; margin:0 auto; border:0; border-spacing:0; padding:1px;">
               <tbody>
                 <tr>
                   <td>
                     <h2 id="awards">🏆  Awards</h2>
                     <ul>
+                      <li><strong>China National Scholarship for Ph.D. (博士生国家奖学金)</strong>, Ministry of Education of the People's Republic of China, 2026</li>
                       <li><strong>Graduate Student Research Grant</strong>, IEEE Computational Intelligence Society (CIS), 2026</li>
                       <li><strong>Outstanding Three-Good Student (三好学生标兵)</strong>, University of Chinese Academy of Sciences, 2026</li>
                       <li><strong>Doctoral Student Project of the Young S&amp;T Talents Cultivation Project</strong>, CAST (中国科协青年科技人才培育工程博士生专项计划), 2025</li>
@@ -934,6 +1071,7 @@
                     </h3>
                     <ul>
                       <li>AAAI Conference on Artificial Intelligence <strong>(AAAI)</strong>, 2026 and 2027</li>
+                      <li>IEEE International Conference on Acoustics, Speech and Signal Processing <strong>(ICASSP)</strong>, 2027</li>
                       <li>IEEE International Conference on Multimedia and Expo <strong>(ICME)</strong>, 2026</li>
                       <li>IEEE International Conference on Robotics and Automation <strong>(ICRA)</strong>, 2025</li>
                       <li>IEEE International Joint Conference on Neural Networks <strong>(IJCNN)</strong>, 2024&ndash;2027</li>
