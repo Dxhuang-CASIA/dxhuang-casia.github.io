@@ -401,6 +401,50 @@ h3 {
   color: inherit !important;
 }
 
+.collaboration-note {
+  margin: 18px 0 0;
+  padding: 2px 0 2px 14px;
+  border-left: 3px solid var(--link);
+  color: var(--text);
+  font-weight: 400;
+  text-align: left;
+}
+
+.collaboration-title,
+.collaboration-copy,
+.collaboration-contact {
+  display: block;
+}
+
+.collaboration-title {
+  margin-bottom: 3px;
+  color: var(--link);
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+.collaboration-copy {
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.collaboration-contact {
+  margin-top: 3px;
+  color: var(--muted);
+}
+
+.collaboration-contact,
+.collaboration-contact a {
+  font-size: 15px;
+  line-height: 1.65;
+}
+
+.collaboration-contact a {
+  font-weight: 600;
+  text-decoration: underline;
+}
+
 .publication-metric {
   color: var(--publication-emphasis);
 }
