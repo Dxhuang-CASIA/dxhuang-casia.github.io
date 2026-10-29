@@ -370,6 +370,59 @@ h3 {
   line-height: 1.45;
 }
 
+.publication-group {
+  margin: 18px 0 0;
+}
+
+.publication-group > summary {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 44px;
+  padding: 9px 2px;
+  border-bottom: 1px solid var(--line);
+  color: var(--subheading);
+  cursor: pointer;
+  list-style: none;
+}
+
+.publication-group > summary::-webkit-details-marker {
+  display: none;
+}
+
+.publication-group > summary::before {
+  content: "";
+  flex: 0 0 auto;
+  width: 7px;
+  height: 7px;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: rotate(-45deg);
+}
+
+.publication-group[open] > summary::before {
+  transform: rotate(45deg);
+}
+
+.publication-group > summary h3 {
+  margin: 0;
+  color: inherit;
+}
+
+.publication-group > summary:hover {
+  color: var(--link);
+}
+
+.publication-group > summary:focus-visible {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 3px;
+  border-radius: 3px;
+}
+
+.publication-group[open] > summary {
+  margin-bottom: 8px;
+}
+
 .name {
   padding-top: 16px;
   margin: 0 0 14px;
@@ -449,12 +502,34 @@ h3 {
   color: var(--publication-emphasis);
 }
 
+.citation-count {
+  display: inline-block;
+  margin-left: 3px;
+  padding: 1px 7px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: var(--accent-soft);
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.6;
+  white-space: nowrap;
+}
+
 .profile-photo {
   aspect-ratio: 3 / 2;
   object-fit: cover;
   border-radius: 12px;
   box-shadow: 0 8px 22px rgba(31, 50, 73, 0.16);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.portrait-caption {
+  margin: 10px 0 0;
+  color: var(--text);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 15px;
+  line-height: 1.6;
+  text-align: center;
 }
 
 .portrait-cell a:hover .profile-photo {

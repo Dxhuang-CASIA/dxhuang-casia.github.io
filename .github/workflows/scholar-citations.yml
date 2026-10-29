@@ -1,0 +1,53 @@
+name: Update Google Scholar citations
+
+on:
+  schedule:
+    # 07:17 Hong Kong time (UTC+8); GitHub schedules may run late.
+    - cron: '17 23 * * *'
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - index.html
+      - scripts/sync_citations.py
+      - scripts/citations.js
+      - scripts/scholar-publications.json
+      - tests/test_citations.py
+      - tests/citations.test.cjs
+      - .github/workflows/scholar-citations.yml
+
+permissions:
+  contents: write
+
+concurrency:
+  group: google-scholar-citations
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Check parser and matching
+        run: python -m unittest discover -s tests -p 'test_citations.py' -v
+      - name: Check citation display and fallback
+        run: node --test tests/citations.test.cjs
+      - name: Fetch current Google Scholar counts
+        run: python scripts/sync_citations.py
+      - name: Commit generated citation data
+        run: |
+          git add data/scholar-citations.json data/scholar-citations.js
+          if git diff --cached --quiet; then
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'Update Google Scholar citation counts'
+          git pull --rebase origin main
+          git push origin HEAD:main
