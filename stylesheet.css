@@ -370,6 +370,89 @@ h3 {
   line-height: 1.45;
 }
 
+.experience-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.experience-item {
+  display: grid;
+  grid-template-columns: 108px minmax(0, 1fr);
+  grid-template-areas: "logos date" "logos detail";
+  column-gap: 20px;
+  row-gap: 4px;
+  padding: 16px 0;
+  break-inside: avoid;
+}
+
+.experience-logos {
+  grid-area: logos;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.experience-logo {
+  display: flex;
+  flex: 0 0 96px;
+  align-items: center;
+  justify-content: center;
+  width: 96px;
+  height: 96px;
+}
+
+.experience-logo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.experience-detail {
+  grid-area: detail;
+  min-width: 0;
+}
+
+.experience-item + .experience-item {
+  margin-top: 0;
+  border-top: 1px solid var(--line);
+}
+
+.experience-date {
+  grid-area: date;
+  padding-top: 2px;
+  color: var(--muted);
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.experience-detail h3 {
+  margin: 0 0 4px;
+  font-size: 17px;
+  line-height: 1.5;
+}
+
+.experience-detail h3 a {
+  font-size: inherit;
+  line-height: inherit;
+}
+
+.experience-role {
+  margin: 0;
+}
+
+.experience-note {
+  margin: 4px 0 0;
+  color: var(--muted);
+}
+
+.experience-note,
+.experience-note a {
+  font-size: 15px;
+}
+
 .publication-group {
   margin: 18px 0 0;
 }
@@ -684,6 +767,7 @@ span.highlight {
     min-width: 0;
     justify-content: space-between;
     gap: 0;
+    overflow-x: auto;
   }
 
   .theme-toggle {
@@ -762,6 +846,29 @@ span.highlight {
 }
 
 @media (max-width: 520px) {
+  .experience-item {
+    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-areas: "logos date" "detail detail";
+    column-gap: 12px;
+    row-gap: 10px;
+    padding: 14px 0;
+  }
+
+  .experience-logos {
+    justify-content: flex-start;
+  }
+
+  .experience-logo {
+    flex-basis: 80px;
+    width: 80px;
+    height: 80px;
+  }
+
+  .experience-date {
+    align-self: center;
+    text-align: right;
+  }
+
   .section-nav a {
     padding: 8px 4px;
     font-size: 12px;
